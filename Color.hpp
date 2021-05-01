@@ -7,8 +7,14 @@ enum Color{
     Blue,
     Black
 };
+inline string color_string(int c) {
 
-string color_string(int c);
+    if(c == 0) { return "yellow"; }
+    if(c == 1) { return "red"; }
+    if(c == 2) { return "blue"; }
+    else { return "black"; }
+}
+
 //  compared to cities_map.txt 
 const map<City, Color> cities_colors {
     { Algiers, Black },
