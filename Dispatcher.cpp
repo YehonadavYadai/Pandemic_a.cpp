@@ -9,7 +9,5 @@ Player& Dispatcher::fly_direct(City c){
         city = c;
         return *this;
     }
-    else {
-        return Player::fly_direct(c);
-    }
+    return Player::fly_direct(c);
 }

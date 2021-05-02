@@ -17,10 +17,7 @@ bool Board::is_clean() {
 }
 
 bool Board::is_connected(City& c1, City& c2) {
-    if(connections.at(c1).find(c2)!=connections.at(c1).end()){
-        return true;
-    }
-    return false;
+    return connections.at(c1).find(c2)!=connections.at(c1).end();
 }
 
 void Board::update_research_station(City c) {
@@ -28,15 +25,13 @@ void Board::update_research_station(City c) {
 }
 
 bool Board::is_research_station(City c) {
-    if(research_stations.find(c)!=research_stations.end()){
-        return true;
-    }
-    return false;
+    return research_stations.find(c)!=research_stations.end();
 }
 
 void Board::mark_cured(Color c) {
     // cure_discoverd.insert(c);
-    cured[c] = true;
+    int i =c;
+    cured[i] = true;
     // cout << color_string(c) << " : is discoverd! "<<cured[c] << endl;
 }
 

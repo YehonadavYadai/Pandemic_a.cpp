@@ -8,9 +8,10 @@ Player& Scientist::discover_cure(Color c) {
         throw std::invalid_argument{"illegal action: city "+city_string(city)+" has no research station!"};
     }
     int count = 0;
-    for(auto& t : cards){
-        if(board.color_of(t) == c)
+    for(const auto& t : cards){
+        if(board.color_of(t) == c){
             count++;
+        }
     }
     if(count < n){
         throw std::invalid_argument{"illegal action: you only have "+std::to_string(count)+" "+ color_string(c) + " cards remaining " };

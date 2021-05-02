@@ -6,7 +6,7 @@
 namespace pandemic {
 
     class Player {
-
+        
         protected:
             Board& board;
             std::set<City> cards;
@@ -25,5 +25,6 @@ namespace pandemic {
             virtual Player& treat(City c);
             inline string role(){return typeRole;}
             Player& take_card(City c);
+            const int CardLimit=5;
     };
 }

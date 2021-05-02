@@ -52,17 +52,18 @@ Player& Player::discover_cure(Color c){
         throw std::invalid_argument{"illegal action: city "+city_string(city)+" has no research station!"};
     }
     int count = 0;
-    for(auto& t : cards){
-        if(board.color_of(t) == c)
+    for(const auto& t : cards){
+        if(board.color_of(t) == c){
             count++;
+        }
     }
-    if(count < 5){
+    if(count < CardLimit){
         throw std::invalid_argument{"illegal action: you only have "+to_string(count)+" "+ color_string(c) + " cards remaining " };
     }
     count = 1;
     // for(auto it = cards.begin(); it < cards.end(); count++){
     for(auto it = cards.begin(); it != cards.end(); count++){
-        if(count == 5) { break; } // can remove if we set first for < insted of != or should be count== 5
+        if(count == CardLimit) { break; } // can remove if we set first for < insted of != or should be count== 5
         if(board.color_of(*it) == c) {
             it = cards.erase(it);
         }
