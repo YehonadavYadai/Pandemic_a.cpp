@@ -1,7 +1,6 @@
 #pragma once
 #include <map>
 #include <set>
-using namespace std;
 enum City
 {
     Algiers,
@@ -54,7 +53,7 @@ enum City
     Tokyo,
     Washington
 };
-inline string city_string(City c) {
+inline std::string cityToString(City c) {
 
     switch (c){
         case Algiers: return "Algiers"; break;

@@ -1,18 +1,18 @@
 #pragma once
 #include "City.hpp"
-
+using namespace std;
 enum Color{
     Yellow,
     Red,
     Blue,
     Black
 };
-inline string color_string(int c) {
+inline string colorToString(int c) {
 
     if(c == 0) { return "yellow"; }
     if(c == 1) { return "red"; }
     if(c == 2) { return "blue"; }
-    else { return "black"; }
+    return "black";
 }
 
 //  compared to cities_map.txt 

@@ -9,12 +9,12 @@ namespace pandemic {
         
         protected:
             Board& board;
-            std::set<City> cards;
+            set<City> cards;
             City city;
-            std::string typeRole;
+            string typeRole;
 
         public:
-            inline Player(Board& b, City c, std::string r): board(b), city(c), typeRole(r){}
+            inline Player(Board& b, City c, string r): board(b), city(c), typeRole(r){}
 
             Player& drive(City c);
             virtual Player& fly_direct(City c);

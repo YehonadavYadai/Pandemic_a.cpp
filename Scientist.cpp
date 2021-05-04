@@ -1,25 +1,24 @@
 #include "Scientist.hpp"
 
-using namespace std;
 using namespace pandemic;
 
 Player& Scientist::discover_cure(Color c) {
     if(!board.is_research_station(city)){
-        throw std::invalid_argument{"illegal action: city "+city_string(city)+" has no research station!"};
+        throw invalid_argument{"Execption: city "+cityToString(city)+" must have research station!"};
     }
     int count = 0;
     for(const auto& t : cards){
-        if(board.color_of(t) == c){
+        if(board.colorOf(t) == c){
             count++;
         }
     }
     if(count < n){
-        throw std::invalid_argument{"illegal action: you only have "+std::to_string(count)+" "+ color_string(c) + " cards remaining " };
+        throw invalid_argument{"Execption: there is only "+to_string(count)+" "+ colorToString(c) + " cards remaining " };
     }
     count = 1;
     for(auto it = cards.begin(); it != cards.end(); count++){
         if(count == n) { break; }
-        if(board.color_of(*it) == c) {
+        if(board.colorOf(*it) == c) {
             it = cards.erase(it);
         }
         else {
@@ -27,6 +26,5 @@ Player& Scientist::discover_cure(Color c) {
         }
     }
     board.mark_cured(c);
-    // std::cout << "The disease is cured: " << color_string(c) << std::endl;
     return *this;
 }

@@ -1,14 +1,13 @@
 #include "GeneSplicer.hpp"
 
-using namespace std;
 using namespace pandemic;
 
 Player& GeneSplicer::discover_cure(Color c){
     if(!board.is_research_station(city)){
-        throw std::invalid_argument{"illegal action: city "+city_string(city)+" has no research station!"};
+        throw invalid_argument{"Execption: city "+cityToString(city)+" must have research station!"};
     }
     if(cards.size() < CardLimit){
-        throw std::invalid_argument{"illegal action: you only have "+std::to_string(cards.size())+" "+ color_string(c) + " cards remaining " };
+        throw invalid_argument{"Execption: there is only "+to_string(cards.size())+" "+ colorToString(c) + " cards remaining " };
     }
     int count = 1;
     for(auto it = cards.begin(); it != cards.end(); count++){
@@ -16,6 +15,5 @@ Player& GeneSplicer::discover_cure(Color c){
         it = cards.erase(it);
     }
     board.mark_cured(c);
-    // std::cout << "The disease is cured: " << color_string(c) << std::endl;
     return *this;
 }

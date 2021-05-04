@@ -4,12 +4,12 @@ using namespace std;
 using namespace pandemic;
 
 int& Board::operator[](City c) {
-    return diseas_cubes[c];
+    return diseasBox[c];
 }
 
 bool Board::is_clean() {
-    for(auto& pair: diseas_cubes) {
-        if(pair.second > 0) {
+    for(auto& di: diseasBox) {
+        if(di.second > 0) {
             return false;
         }
     }
@@ -17,33 +17,50 @@ bool Board::is_clean() {
 }
 
 bool Board::is_connected(City& c1, City& c2) {
-    return connections.at(c1).find(c2)!=connections.at(c1).end();
+    return connections.at(c1).contains(c2);
 }
 
 void Board::update_research_station(City c) {
-    research_stations.insert(c);
+    researchStations.insert(c);
 }
 
 bool Board::is_research_station(City c) {
-    return research_stations.find(c)!=research_stations.end();
+    return researchStations.contains(c);
 }
 
 void Board::mark_cured(Color c) {
-    // cure_discoverd.insert(c);
-    int i =c;
-    cured[i] = true;
-    // cout << color_string(c) << " : is discoverd! "<<cured[c] << endl;
+    medicine[c] = true;
 }
 
 bool Board::is_cure_discoverd(City c) {
-    return cured[color_of(c)];
+    return medicine[colorOf(c)];
 }
 
-Color Board::color_of(City c) { 
+Color Board::colorOf(City c) {
     return cities_colors.at(c);
 }
 
-// connections between cities over the board compared to citis_map.txt  
+ostream& pandemic::operator<<(ostream& out, const Board& b) {
+    out <<  "__________________________ BOARD _________________________"<<endl<<endl;
+    out <<  "level of disease:"  << endl;
+    for(auto& di: b.diseasBox) {
+        out <<"  ["<<di.second<<"] "<< cityToString(di.first)<<endl;
+    }
+    out << endl;
+    out << "Cure discovered:"  << endl;
+    for(int i = 0; i < 4; i++) {
+        out<<"  [" <<b.medicine[i]<<"] "<<  colorToString(i) <<endl;
+    }
+    out << endl;
+    int j=1;
+    out <<  "Research stations:" << endl;
+    for(auto& rs: b.researchStations) {
+        out <<"  "<<j++<<"."<<  cityToString(rs) << endl;
+    }
+    out <<  "________________________ END BOARD ________________________"  <<endl;
+    return out;
+}
+
 map<City, set<City>> Board::connections {
     { Algiers, {Madrid, Paris, Istanbul, Cairo } },
     { Atlanta, {Chicago, Miami, Washington } },

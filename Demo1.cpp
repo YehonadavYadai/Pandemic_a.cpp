@@ -152,4 +152,3 @@ int main() {
 	cout << board << endl;  // prints the board in any reasonable format.
 	cout << board.is_clean() << endl;  // prints "1" - the board is clean - congratulations!!! You treated all diseases!!!
 }
-

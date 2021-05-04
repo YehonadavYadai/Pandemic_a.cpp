@@ -1,23 +1,22 @@
 #include "Researcher.hpp"
 
-using namespace std;
 using namespace pandemic;
 
 
 Player& Researcher::discover_cure(Color c){
     int count = 0;
     for(const auto& t : cards){
-        if(board.color_of(t) == c){
+        if(board.colorOf(t) == c){
             count++;
         }
     }
     if(count < CardLimit){
-        throw std::invalid_argument{"illegal action: you only have "+std::to_string(count)+" "+ color_string(c) + " cards remaining " };
+        throw invalid_argument{"Execption: there is only "+to_string(count)+" "+ colorToString(c) + " cards remaining " };
     }
     count = 1;
     for(auto it = cards.begin(); it != cards.end(); count++){
         if(count == CardLimit) { break; }
-        if(board.color_of(*it) == c) {
+        if(board.colorOf(*it) == c) {
             it = cards.erase(it);
         }
         else {
@@ -25,6 +24,5 @@ Player& Researcher::discover_cure(Color c){
         }
     }
     board.mark_cured(c);
-    // std::cout << "The disease is cured: " << color_string(c) << std::endl;
     return *this;
 }
