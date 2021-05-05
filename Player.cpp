@@ -14,7 +14,7 @@ Player& Player::drive(City c){
 
 Player& Player::fly_direct(City c){
     if(!cards.contains(c)){// if there is no card for this city throw execption
-        throw invalid_argument{"Execption: card's " + cityToString(c)+"doesn't exist"};
+        throw invalid_argument{"Execption: card's " + cityToString(c)+" doesn't exist"};
     }
     cards.erase(c);
     city = c;
@@ -27,7 +27,7 @@ Player& Player::fly_charter(City c){
         city = c;
         return *this;
     }
-    throw invalid_argument{"Execption: card's " + cityToString(c)+"doesn't exist"};
+    throw invalid_argument{"Execption: card's " + cityToString(c)+" doesn't exist"};
 
 }
 
