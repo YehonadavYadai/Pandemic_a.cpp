@@ -1,12 +1,3 @@
-/************************************************************************************
- * C++ course, Ariel university.
- * Assignment number 3.
- *
- * AUTHORS: Eyal Levi
- * https://github.com/LeviEyal
- * Date: 2021-04
- ***********************************************************************************/
-
 #include "doctest.h"
 #include <iostream>
 #include <stdexcept>
