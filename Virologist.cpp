@@ -1,22 +1,37 @@
 #include "Virologist.hpp"
 
+using namespace std;
 using namespace pandemic;
 
-Player& Virologist::treat(City c){
-    if (city != c) {
-        if(!cards.contains(c)) {
-            throw invalid_argument{"Execption: card's " + cityToString(c)+"doesn't exist"};
-        }
-        cards.erase(c);
+Player &Virologist::treat(City c)
+{
+    bool flag=false;
+    //if he is in the city or you have card keep going
+    if (city!=c){
+        flag =true;
+        //if you not in the city cheeck if you got card 
+       if(all_cards.count(c)==0){
+        throw std::invalid_argument("you dont have card for this city! ");
     }
-    else if (board[c] == 0) {
-        throw invalid_argument{"Execption: not enough cubes in city " + cityToString(c)};
+    }
+        // check if cured or not 
+    if (my_board[c]==0){
+        throw std::invalid_argument("no need to cure");
+    }
 
+    // check if there is medicen
+    if (my_board.check_cured(pandemic::Board::get_city_color(c)))
+    {
+        my_board.set_cubes(c,0);
     }
-    else if (board.is_cure_discoverd(c)) {
-        board[c] = 0;
-        return *this;
+
+    else
+    {
+        my_board.set_cubes(c,my_board[c]-1);
     }
-    board[c]--;
+    //check if we need to drop a card.
+    if (flag){
+        all_cards.erase(c);
+    }
     return *this;
 }

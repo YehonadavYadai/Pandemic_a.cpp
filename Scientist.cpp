@@ -1,30 +1,43 @@
 #include "Scientist.hpp"
 
+using namespace std;
 using namespace pandemic;
 
-Player& Scientist::discover_cure(Color c) {
-    if(!board.is_research_station(city)){
-        throw invalid_argument{"Execption: city "+cityToString(city)+" must have research station!"};
+Player &Scientist::discover_cure(Color c)
+{
+   int count =0;
+    //check if there is a station 
+    if (!my_board.check_station(city)){
+         throw std::invalid_argument("you dont have station in your city! " + get_city(city));
     }
-    int count = 0;
-    for(const auto& t : cards){
-        if(board.colorOf(t) == c){
-            count++;
-        }
-    }
-    if(count < n){
-        throw invalid_argument{"Execption: there is only "+to_string(count)+" "+ colorToString(c) + " cards remaining " };
-    }
-    count = 1;
-    for(auto it = cards.begin(); it != cards.end(); count++){
-        if(count == n) { break; }
-        if(board.colorOf(*it) == c) {
-            it = cards.erase(it);
-        }
-        else {
-            ++it;
-        }
-    }
-    board.mark_cured(c);
+    
+    //check if there is 5 from this color 
+    set <City> counter;
+     for (auto const &card:all_cards) {
+         if (color_by_city.at(card)==c){
+             count++;
+             counter.insert(card);
+             if (count==n){
+                 break;
+             }
+         }
+     }
+         //if les then five were found
+         if (count<n){
+             throw std::invalid_argument("you dont have five cards " + get_color(c));
+         }
+         //if you find 5
+         
+             //build and drop the cards
+             my_board.set_cured(c);
+             
+             for (auto const &card:counter){
+                 all_cards.erase(card);
+             }
+         
+    
     return *this;
+
+
+
 }

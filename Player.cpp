@@ -1,97 +1,165 @@
 #include "Player.hpp"
 
+using namespace std;
 using namespace pandemic;
-
-
-
-Player& Player::drive(City c){
-    if(!board.is_connected(city, c)){ // if there is no connection throw exception
-        throw invalid_argument{"Execption: " + cityToString(city) + " is not connected to " + cityToString(c)};
+const int FIVE =5;
+void check_no_here(City from,City to){
+    if (to==from){
+         throw std::invalid_argument("you are already here! " + get_city(from));
     }
-    city = c;
+}
+
+
+Player &Player::take_card(City c)
+{
+    all_cards.insert(c);
     return *this;
 }
 
-Player& Player::fly_direct(City c){
-    if(!cards.contains(c)){// if there is no card for this city throw execption
-        throw invalid_argument{"Execption: card's " + cityToString(c)+" doesn't exist"};
+Player &Player::remove_cards()
+{
+   set<City> a;
+   all_cards=a;
+   return *this;
+}
+
+Player &Player::drive(City c)
+{
+   check_no_here(city,c);
+    
+    if(pandemic::Board::check_sib(city,c)){
+        city=c;
     }
-    cards.erase(c);
-    city = c;
+    else{
+        throw std::invalid_argument("no connection to : " + get_city(c));
+    }
+    return *this;
+    
+    
+}
+
+Player &Player::fly_direct(City c)
+{
+   check_no_here(city,c);
+
+    if(all_cards.count(c)==0){
+          throw std::invalid_argument("you dont have card of  " + get_city(c));
+    }
+    
+        city=c;
+        all_cards.erase(c);
+    
     return *this;
 }
 
-Player& Player::fly_charter(City c){
-    if(cards.contains(city)){
-        cards.erase(city);
-        city = c;
-        return *this;
+Player &Player::fly_shuttle(City c)
+{
+    
+    check_no_here(city,c);
+    if (!my_board.check_station(city)){
+         throw std::invalid_argument("you dont have station in your city!  " + get_city(city));
     }
-    throw invalid_argument{"Execption: card's " + cityToString(c)+" doesn't exist"};
-
-}
-
-Player& Player::fly_shuttle(City c){
-    if(!board.is_research_station(city) || !board.is_research_station(c)){
-        throw invalid_argument{"Execption: " + cityToString(city) + " and " + cityToString(c) + " must both have research station."};
+    if (!my_board.check_station(c)){
+         throw std::invalid_argument("there is no station at :  " + get_city(city));
     }
-    city = c;
+    city=c;
     return *this;
+
+    
+    
 }
 
-Player& Player::build(){
-    if(!cards.contains(city)){
-        throw invalid_argument{"Execption: research station faild, player must have a " + cityToString(city) + " card!"};
+Player &Player::fly_charter(City c)
+{
+    check_no_here(city,c);
+    if(all_cards.count(city)==0){
+          throw std::invalid_argument("you dont have card of  " + get_city(city));
     }
-    board.update_research_station(city);
-    cards.erase(city);
+    
+       
+        all_cards.erase(city);
+        city=c;
+    
     return *this;
+
+   
 }
 
-Player& Player::discover_cure(Color c){
-    if(!board.is_research_station(city)){
-        throw invalid_argument{"Execption: city "+cityToString(city)+" must have research station!"};
+Player &Player::build()
+{
+    if(all_cards.count(city)==0){
+          throw std::invalid_argument("you dont have card of " + get_city(city));
     }
-    int count = 0;
-    for(const auto& t : cards){
-        if(board.colorOf(t) == c){
-            count++;
-        }
-    }
-    if(count < CardLimit){
-        throw invalid_argument{"Execption: there is only "+to_string(count)+" "+ colorToString(c) + " cards remaining " };
-    }
-    count = 1;
-    for(auto it = cards.begin(); it != cards.end(); count++){
-        if(count == CardLimit) { break; } 
-        if(board.colorOf(*it) == c) {
-            it = cards.erase(it);
-        }
-        else {
-            ++it; 
-        }
-    }
-    board.mark_cured(c);
+    
+        my_board.set_station(city);
+        all_cards.erase(city);
+
+    
     return *this;
+    
+    
 }
 
-Player& Player::treat(City c){
-    if (city != c) {
-        throw invalid_argument{"Execption: Outside of city" + cityToString(c)};
+Player &Player::discover_cure(Color c)
+{
+    int count =0;
+    //check if there is a station 
+    if (!my_board.check_station(city)){
+         throw std::invalid_argument("you dont have station in your city! " + get_city(city));
     }
-    else if (board[c] == 0) {
-        throw invalid_argument{"Execption: not enough cubes in city " + cityToString(c)};
-    }
-    else if (board.is_cure_discoverd(c)) {
-        board[c] = 0;
-    }
-    else {
-        board[c]--;
-    }
+    
+    //check if there is 5 from this color 
+    set <City> counter;
+     for (auto const &card:all_cards) {
+         if (color_by_city.at(card)==c){
+             count++;
+             counter.insert(card);
+             if (count==FIVE){
+                 break;
+             }
+         }
+     }
+         //if les then five were found
+         if (count<FIVE){
+             throw std::invalid_argument("you dont have five cards " + get_color(c));
+         }
+         //if you find 5
+         
+             //build and drop the cards
+             my_board.set_cured(c);
+             
+             for (auto const &card:counter){
+                 all_cards.erase(card);
+             }
+         
+    
     return *this;
+
+
+   
 }
 
-Player& Player::take_card(City c){
-    cards.insert(c);
+Player &Player::treat(City c)
+{
+    if (city!=c){
+        throw std::invalid_argument("you cant treat city you not in ");
+    }
+    
+    // check if cured or not 
+    if (my_board[c]==0){
+        throw std::invalid_argument("you dont have five cards");
+    }
+
+    // check if there is medicen
+    if (my_board.check_cured(pandemic::Board::get_city_color(c)))
+    {
+        my_board.set_cubes(c,0);
+    }
+
+    else
+    {
+        my_board.set_cubes(c,my_board[c]-1);
+    }
+
     return *this;
 }

@@ -18,36 +18,21 @@
 using namespace pandemic;
 using namespace std;
 
-TEST_CASE("Test OperationsExpert"){
+TEST_CASE("opearion"){
     Board board;
     City r = City::Algiers;
     OperationsExpert player{board, r};
     CHECK_NOTHROW(player.build());
     r= City::Atlanta;
     CHECK_NOTHROW(player.build());
-    r= City::Baghdad;
+    r= City::Karachi;
     CHECK_NOTHROW(player.build());
-    r= City::Cairo;
+    r= City::Lagos;
     CHECK_NOTHROW(player.build());
     r= City::NewYork;
     CHECK_NOTHROW(player.build());
 }
-TEST_CASE("Test Dispatcher"){
-    Board b;
-    City c = City::Osaka;
-    Dispatcher player{b, c};
-    CHECK_NOTHROW(player.take_card(c));
-    CHECK_NOTHROW(player.build());
-    City c1 =City::Chicago;
-    CHECK_THROWS(player.fly_direct(c1));
-    CHECK_NOTHROW(player.take_card(c1));
-    CHECK_THROWS(player.build());
-    b.update_research_station(City::Chicago);
-    CHECK_NOTHROW(player.fly_direct(c1));
-    CHECK_NOTHROW(player.take_card(c1));
-    CHECK_NOTHROW(player.build());
-    
-}
+
 
 TEST_CASE("Test Virologist"){
     Board b;
@@ -64,13 +49,13 @@ TEST_CASE("Test Virologist"){
 
 }
 
-TEST_CASE("Test Researcher"){
+TEST_CASE(" Researcher"){
     Board b;
-    City c=City::Santiago;
+    City c=City::Johannesburg;
     Researcher player{b, c};
     CHECK_THROWS(player.discover_cure(Color::Yellow));
     player.take_card(c);
-    player.take_card(City::BuenosAires);
+    player.take_card(City::Santiago);
     CHECK_THROWS(player.discover_cure(Color::Yellow));
     player.take_card(City::Johannesburg);
     CHECK_THROWS(player.discover_cure(Color::Yellow));
@@ -78,4 +63,40 @@ TEST_CASE("Test Researcher"){
     CHECK_THROWS(player.discover_cure(Color::Yellow));
     player.take_card(City::Kinshasa);
     CHECK_NOTHROW(player.discover_cure(Color::Yellow));
+}
+TEST_CASE("methods"){
+    Board board;
+    OperationsExpert player(board, Atlanta);
+    
+    CHECK_NOTHROW(player.drive(Washington));//drive to a neighbor
+    
+    CHECK_THROWS(player.fly_charter(Cairo));
+    CHECK_NOTHROW(player.take_card(Washington));
+    CHECK_NOTHROW(player.fly_direct(Chicago));
+    player.build();
+    player.take_card(Cairo);
+    player.take_card(Cairo);
+    CHECK_NOTHROW(player.fly_charter(Chicago));
+    CHECK_THROWS(player.build());
+    player.take_card(Chicago);
+    CHECK_NOTHROW(player.build());
+    CHECK_NOTHROW(player.fly_charter(Cairo));
+    player.take_card(Chicago);
+    player.take_card(Essen);
+    player.take_card(Atlanta);
+    player.fly_direct(Chicago);
+    player.take_card(Atlanta);
+    player.take_card(London);
+    player.take_card(Madrid);
+    
+    CHECK_THROWS(player.treat(Chicago));
+    CHECK_THROWS(player.fly_shuttle(Atlanta));
+    CHECK_THROWS(player.fly_shuttle(London));
+    CHECK_THROWS(player.discover_cure(Red));
+    CHECK_NOTHROW(player.discover_cure(Blue));
+    CHECK_NOTHROW(player.treat(Chicago));
+    player.take_card(London);
+    CHECK_NOTHROW(player.fly_direct(Atlanta));
+   
+
 }

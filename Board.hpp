@@ -1,33 +1,46 @@
+/**
+ * Board for the Pandemic Game
+ * 
+ * C++ Course - Ariel University
+ * 4th Assignment
+ * 
+ * @author Adi Dahari
+ * */
 #pragma once
-#include "City.hpp"
-#include "Color.hpp"
 #include <map>
 #include <set>
+#include <string>
 #include <iostream>
-using namespace std;
-namespace pandemic {
+#include "City.hpp"
+#include "Color.hpp"
 
-    class Board {
+namespace pandemic
+{
 
-        static map<City, set<City>> connections; // the set of the citys that connected to each city
-        map<City, int> diseasBox;
-        bool medicine[4] = {0};
-        set<City> researchStations;
+    class Board
+    {
+        static std::map<City, std::set<City>> board_map;
+        std::set<City> station_list;
+        std::map<City, int> cubes_data;
+        std::set<Color> cured_dises;
 
-        public:
-            Board() {}
-
-            int& operator[](City c); // update diseasBox, for example board[City::HongKong]=2 means disease_cube[HongKong]=2
-            bool is_clean(); // is the board clean from disease?
-            static bool is_connected(City& c1, City& c2); // is there connection between those two cities?
-            void update_research_station(City c); // place reseach station in this city
-            bool is_research_station(City c);// is there any reseach station in this city?
-            void mark_cured(Color c); // mark medicine's color that found.
-            bool is_cure_discoverd(City c);  // is there any cure for color's disease that this city need?
-            static Color colorOf(City c); // what the color's disease that this city got infected
-            friend ostream& operator<<(ostream& out,const Board& b);
-            void remove_cures();
+    public:
+        Board();
+        ~Board(){};
+        bool is_clean();
+        int &operator[](City c);
+        static Color get_city_color(City c);
+        void set_station(City c);
+        void set_cured(Color c);
+        void set_cubes(City c, int n);
+        void remove_cures();
+        void remove_stations();
+       static  bool check_sib(City from,City to);
+        bool check_station(City c);
+        bool check_cured(Color c);
+        
+        friend std::ostream &operator<<(std::ostream &os, const Board &b);
+       
     };
 
-//----------------------------------------------------------------------------------------------
 }

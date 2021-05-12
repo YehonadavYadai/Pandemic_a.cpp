@@ -1,9 +1,15 @@
 #include "OperationsExpert.hpp"
 
+using namespace std;
 using namespace pandemic;
 
+Player &OperationsExpert::build()
+{
+     
+        my_board.set_station(city);
+        all_cards.erase(city);
 
-Player& OperationsExpert::build(){
-    board.update_research_station(city);
+    
     return *this;
+    
 }

@@ -1,19 +1,40 @@
 #include "GeneSplicer.hpp"
 
+using namespace std;
 using namespace pandemic;
+const int FIVE =5;
+Player &GeneSplicer::discover_cure(Color c)
+{
+     int count =0;
+    //check if there is a station 
+    if (!my_board.check_station(city)){
+         throw std::invalid_argument("you dont have station in your city! " + get_city(city));
+    }
+    
+    //check if there is 5 from this color 
+    set <City> counter;
+     for (auto const &card:all_cards) {
+         // just count no check whice color 
+             count++;
+             counter.insert(card);
+             if (count==FIVE){
+                 break;
+             }
+     }
+         
+         //if les then five were found
+         if (count<FIVE){
+             throw std::invalid_argument("you dont have five cards " + get_color(c));
+         }
+         //if you find 5
+         
+             //build and drop the cards
+             my_board.set_cured(c);
+             
+             for (auto const &card:counter){
+                 all_cards.erase(card);
+             }
+         
 
-Player& GeneSplicer::discover_cure(Color c){
-    if(!board.is_research_station(city)){
-        throw invalid_argument{"Execption: city "+cityToString(city)+" must have research station!"};
-    }
-    if(cards.size() < CardLimit){
-        throw invalid_argument{"Execption: there is only "+to_string(cards.size())+" "+ colorToString(c) + " cards remaining " };
-    }
-    int count = 1;
-    for(auto it = cards.begin(); it != cards.end(); count++){
-        if(count == CardLimit ){ break; }
-        it = cards.erase(it);
-    }
-    board.mark_cured(c);
     return *this;
 }

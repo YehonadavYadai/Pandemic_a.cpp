@@ -1,68 +1,54 @@
 #pragma once
-#include "City.hpp"
-using namespace std;
-enum Color{
-    Yellow,
-    Red,
-    Blue,
-    Black
-};
-inline string colorToString(int c) {
+#include <map>
+#define BLACK "\033[1m\033[30m"
+#define RED "\033[1m\033[31m"
+#define YELLOW "\033[1m\033[33m"
+#define BLUE "\033[1m\033[34m"
+#define RESET "\033[0m"
+namespace pandemic
+{
+    enum Color
+    {
+        Red,
+        Yellow,
+        Blue,
+        Black
+    };
+    inline std::string get_color(Color c)
+    {
+        switch (c)
+        {
+        case Red:
+            return "Red";
+            break;
+        case Yellow:
+            return "Yellow";
+            break;
+        case Blue:
+            return "Blue";
+            break;
+        case Black:
+            return "Black";
+            break;
+        }
+    }
+    inline std::string color_text(Color c)
+    {
+        switch (c)
+        {
+        case Red:
+            return RED;
+            break;
+        case Yellow:
+            return YELLOW;
+            break;
+        case Blue:
+            return BLUE;
+            break;
+        case Black:
+            return BLACK;
+            break;
+        }
+    }
 
-    if(c == 0) { return "yellow"; }
-    if(c == 1) { return "red"; }
-    if(c == 2) { return "blue"; }
-    return "black";
 }
-
-//  compared to cities_map.txt 
-const map<City, Color> cities_colors {
-    { Algiers, Black },
-    { Atlanta, Blue },
-    { Baghdad, Black },
-    { Bangkok, Red },
-    { Beijing, Red },
-    { Bogota, Yellow },
-    { BuenosAires, Yellow },
-    { Cairo, Black },
-    { Chennai, Black },
-    { Chicago, Blue },
-    { Delhi, Black },
-    { Essen, Blue },
-    { HoChiMinhCity, Red },
-    { HongKong, Red },
-    { Istanbul, Black },
-    { Jakarta, Red },
-    { Johannesburg, Yellow },
-    { Karachi, Black },
-    { Khartoum, Yellow },
-    { Kinshasa, Yellow },
-    { Kolkata, Black },
-    { Lagos, Yellow },
-    { Lima, Yellow },
-    { London, Blue },
-    { LosAngeles, Yellow },
-    { Madrid, Blue },
-    { Manila, Red },
-    { MexicoCity, Yellow },
-    { Miami, Yellow },
-    { Milan, Blue },
-    { Montreal, Blue },
-    { Moscow, Black },
-    { Mumbai, Black },
-    { NewYork, Blue },
-    { Osaka, Red },
-    { Paris, Blue },
-    { Riyadh, Black },
-    { SanFrancisco, Blue },
-    { Santiago, Yellow },
-    { SaoPaulo, Yellow },
-    { Seoul, Red },
-    { Shanghai, Red },
-    { StPetersburg, Blue },
-    { Sydney, Red },
-    { Taipei, Red },
-    { Tehran, Black },
-    { Tokyo, Red },
-    { Washington, Blue }
-};
